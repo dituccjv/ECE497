@@ -17,17 +17,16 @@ var data1 = [
     ['1','2','3'],
     ['1','2','3']
 ];
-
-    var data2 = new Array(rowy);
-    for (var i = 0; i < rowy; i++) {
-            data2[i] = new Array(colx);
-        for(var k = 0; k< colx;k++){
-                    data2[i][k]='.';
-        }
+var data2 = new Array(rowy);
+for (var i = 0; i < rowy; i++) {
+    data2[i] = new Array(colx);
+    for(var k = 0; k< colx;k++){
+        data2[i][k]='.';
     }
+}
 
 
-//createTable();
+
 
 program.key(['q','Q'],function(char, key) {
     process.exit(0);
@@ -73,5 +72,12 @@ program.key('up',function(char, key) {
     updateTable();
 });
 program.key('space',function(char, key){
-    createTable();
+    data2 = new Array(rowy);
+    for (var i = 0; i < rowy; i++) {
+        data2[i] = new Array(colx);
+        for(var k = 0; k< colx;k++){
+            data2[i][k]='.';
+        }
+    }
+    updateTable();
 });
