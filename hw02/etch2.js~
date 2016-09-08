@@ -1,0 +1,8 @@
+var bl = require('blessed');
+
+var screen = bl.screen({smartCSR: true});
+screen.title='etch-a-scketch';
+printf("enter a string");
+screen.render();
+//program.on('keypress',function(ch,key){
+//printf(key.name)}

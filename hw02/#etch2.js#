@@ -1,0 +1,22 @@
+var bl = require('blessed');
+
+var screen = bl.screen({smartCSR: true});
+screen.title='etch-a-scketch'
+var etch = bl.form({
+parent: screen,
+keys:true,
+width:10,
+height:3
+});
+
+etch.setText('enter text');
+//etch.key('q',function(){
+//process.exit(0
+//)}
+etch.render();
+
+//program.on('keypress',function(ch,key)
+//{
+//colx=key.name
+//})
+
