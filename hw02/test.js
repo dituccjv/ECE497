@@ -5,23 +5,22 @@ var scr = bl.screen();
 
 var posx=0;
 var posy=0;
-var colx=8;
-var rowy=8;
+var colx=20;
+var rowy=20;
+
+//var colx= prompt("How many columns do you want?");
+//var rowy= prompt("How many rows do you want?");
+
 
 var tbl = bl.listtable({
     keys:true
     });
-var data1 = [
-
-    ['1','2','3'],
-    ['1','2','3'],
-    ['1','2','3']
-];
+;
 var data2 = new Array(rowy);
 for (var i = 0; i < rowy; i++) {
     data2[i] = new Array(colx);
     for(var k = 0; k< colx;k++){
-        data2[i][k]='.';
+        data2[i][k]='';
     }
 }
 
@@ -76,7 +75,7 @@ program.key('space',function(char, key){
     for (var i = 0; i < rowy; i++) {
         data2[i] = new Array(colx);
         for(var k = 0; k< colx;k++){
-            data2[i][k]='.';
+            data2[i][k]='';
         }
     }
     updateTable();
