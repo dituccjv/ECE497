@@ -69,10 +69,11 @@ function b1rupt(x)
 //down button
 function b2rupt(x)
 {
-    if(posy<coly-1)
+    if(posy<rowy-1)
+
         posy+=1;
     else
-        posy=coly-1;
+        posy=rowy-1;
     updateTable();
 };
 
@@ -88,7 +89,7 @@ function b3rupt(x)
 //right button
 function b4rupt(x)
 {
-    if(posx>colx-1)
+    if(posx<colx-1)
         posx+=1;
     else
         posx=colx-1;
