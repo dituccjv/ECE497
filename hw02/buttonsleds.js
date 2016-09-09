@@ -1,4 +1,4 @@
- b = require('bonescript');
+b = require('bonescript');
 
 //instantiate buttons and leds
 var button1 = 'P9_13';
@@ -23,9 +23,6 @@ b.pinMode(led1,b.OUTPUT,7,'disabled');
 b.pinMode(led2,b.OUTPUT,7,'disabled');
 b.pinMode(led3,b.OUTPUT,7,'disabled');
 b.pinMode(led4,b.OUTPUT,7,'disabled');
-
-//set up interupt handler
-
 
 
 function b1rupt(x)
@@ -55,6 +52,11 @@ function b4rupt(x)
     b.digitalWrite(led4,s4);
 };
 
+program.key('right',function(char, key) {
+    if (posx<colx-1)
+        posx+=1;
+    updateTable();
+});
 
 b.attachInterrupt(button1,true,b.FALLING,b1rupt);
 b.attachInterrupt(button2,true,b.FALLING,b2rupt);
