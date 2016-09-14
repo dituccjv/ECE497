@@ -70,7 +70,6 @@ function b1rupt(x)
 function b2rupt(x)
 {
     if(posy<rowy-1)
-
         posy+=1;
     else
         posy=rowy-1;
