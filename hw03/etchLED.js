@@ -47,7 +47,9 @@ var data = new Array(16);
 //Set Starting matrix
 var blank = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 data = blank
+function bg(x){
 data[1]=data[3]=data[5]=data[7]=data[9]=data[11]=data[13]=data[15]=0xff
+};
 
 b.attachInterrupt(button1,true,b.FALLING,b1rupt);
 b.attachInterrupt(button2,true,b.FALLING,b2rupt);
@@ -109,6 +111,8 @@ function b5rupt(x){
 
 function writeM(){
     setTimeout(wait,500);
+    BG();
+    data[posx+1]=data[posx+1]&~Math.pow(2,posy);
     data[posx]=data[posx]|Math.pow(2,posy);
     wire.writeBytes(0x00, data, function(err){});
     console.log(posy,posx);
