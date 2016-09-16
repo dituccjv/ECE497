@@ -99,7 +99,7 @@ function b4rupt(x){
     if(posx>2)
         posx-=2;
     else
-        posx=1;
+        posx=0;
     writeM()}
 function b5rupt(x){
     posx = posy =0;
@@ -111,7 +111,7 @@ function b5rupt(x){
 
 function writeM(){
     setTimeout(wait,500);
-    BG();
+    bg();
     data[posx+1]=data[posx+1]&~Math.pow(2,posy);
     data[posx]=data[posx]|Math.pow(2,posy);
     wire.writeBytes(0x00, data, function(err){});
