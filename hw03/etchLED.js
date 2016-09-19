@@ -105,7 +105,6 @@ function b5rupt(x){
     posx = posy =0;
     data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     data[1]=data[3]=data[5]=data[7]=data[9]=data[11]=data[13]=data[15]=0xff;
-    console.log(data);
     writeM();
 };
 
@@ -115,18 +114,16 @@ function writeM(){
     data[posx+1]=data[posx+1]&~Math.pow(2,posy);
     data[posx]=data[posx]|Math.pow(2,posy);
     wire.writeBytes(0x00, data, function(err){});
-    console.log(posy,posx);
 }
 
-console.log('exit');
+
 
 function wait(){
-    console.log('waiting');
 }
+
 wire.writeByte(0x21, function(err) {
     wire.writeByte(0x81, function(err) {
         wire.writeByte(0xe7, function(err) {
-            console.log('enter')            
         });
     });
 });
