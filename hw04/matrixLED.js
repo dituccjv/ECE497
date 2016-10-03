@@ -23,7 +23,8 @@ $("#slider1").slider({min:0, max:15, slide: function(event, ui) {
 
 // Send one column when LED is clicked.
 function LEDclick(i, j) {
-    disp[i]^=0x1<<j
+    disp[i] ^= 0x1<<j;
+
     //	alert(i+","+j+" clicked");
     // if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===0) ){
     //     disp[i] ^= 0x1<<j;
