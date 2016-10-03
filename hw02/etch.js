@@ -1,4 +1,5 @@
-var b =require('bonescript');
+
+ var b =require('bonescript');
 var bl = require('blessed');
 var program = bl.program();
 var data2;
@@ -70,7 +71,6 @@ function b1rupt(x)
 function b2rupt(x)
 {
     if(posy<rowy-1)
-
         posy+=1;
     else
         posy=rowy-1;
