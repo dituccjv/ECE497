@@ -23,36 +23,37 @@ $("#slider1").slider({min:0, max:15, slide: function(event, ui) {
 
 // Send one column when LED is clicked.
 function LEDclick(i, j) {
+    disp[i]^=0x1<<j
     //	alert(i+","+j+" clicked");
-    if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===0) ){
-        disp[i] ^= 0x1<<j;
-        $('#id'+i+'_'+j).addClass('green');
-    }
-    else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===0)){
-        disp[i]^=0x1<<j;
-        disp[i+1] ^= 0x1<<j;
-        $('#id'+i+'_'+j).removeClass('green');
-        $('#id'+i+'_'+j).addClass('red');
-    }
+    // if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===0) ){
+    //     disp[i] ^= 0x1<<j;
+    //     $('#id'+i+'_'+j).addClass('green');
+    // }
+    // else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===0)){
+    //     disp[i]^=0x1<<j;
+    //     disp[i+1] ^= 0x1<<j;
+    //     $('#id'+i+'_'+j).removeClass('green');
+    //     $('#id'+i+'_'+j).addClass('red');
+    // }
 
-    else if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===1)){
-        disp[i] ^= 0x1<<j;
-        $('#id'+i+'_'+j).removeClass('red');
-        $('#id'+i+'_'+j).addClass('yellow');
-    }
+    // else if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===1)){
+    //     disp[i] ^= 0x1<<j;
+    //     $('#id'+i+'_'+j).removeClass('red');
+    //     $('#id'+i+'_'+j).addClass('yellow');
+    // }
 
-    else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===1)){
-        disp[i] ^= 0x1<<j;
-        disp[i+1] ^= 0x1<<j;
-        $('#id'+i+'_'+j).removeClass('yellow');
+    // else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===1)){
+    //     disp[i] ^= 0x1<<j;
+    //     disp[i+1] ^= 0x1<<j;
+    //     $('#id'+i+'_'+j).removeClass('yellow');
 
-    }
-    else{console.log('you dun goofed');}
+    // }
+    // else{console.log('you dun goofed');}
 
     socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i,
 			   disp: '0x'+disp[i].toString(16)});
-    socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i+1,
-			   disp: '0x'+disp[i+1].toString(16)});
+    // socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i+1,
+    //     		   disp: '0x'+disp[i+1].toString(16)});
 
     //	socket.emit('i2c', i2cNum);
     // Toggle bit on display
