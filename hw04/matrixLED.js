@@ -1,4 +1,4 @@
-xfvar socket;
+var socket;
     var firstconnect = true,
         i2cNum  = "0x70",
 	disp = [];
