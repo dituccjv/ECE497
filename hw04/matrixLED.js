@@ -1,4 +1,4 @@
-xfvar socket;
+var socket;
     var firstconnect = true,
         i2cNum  = "0x70",
 	disp = [];
@@ -23,11 +23,38 @@ $("#slider1").slider({min:0, max:15, slide: function(event, ui) {
 
 // Send one column when LED is clicked.
 function LEDclick(i, j) {
-//	alert(i+","+j+" clicked");
-    disp[i] ^= 0x1<<j;
+    //	alert(i+","+j+" clicked");
+    if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===0) ){
+        disp[i] ^= 0x1<<j;
+        $('#id'+i+'_'+j).addClass('green');
+    }
+    else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===0)){
+        disp[i]^=0x1<<j;
+        disp[i+1] ^= 0x1<<j;
+        $('#id'+i+'_'+j).removeClass('green');
+        $('#id'+i+'_'+j).addClass('red');
+    }
+
+    else if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===1)){
+        disp[i] ^= 0x1<<j;
+        $('#id'+i+'_'+j).removeClass('red');
+        $('#id'+i+'_'+j).addClass('yellow');
+    }
+
+    else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===1)){
+        disp[i] ^= 0x1<<j;
+        disp[i+1] ^= 0x1<<j;
+        $('#id'+i+'_'+j).removeClass('yellow');
+
+    }
+    else{console.log('you dun goofed');}
+
     socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i,
-			     disp: '0x'+disp[i].toString(16)});
-//	socket.emit('i2c', i2cNum);
+			   disp: '0x'+disp[i].toString(16)});
+    socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i+1,
+			   disp: '0x'+disp[i+1].toString(16)});
+
+    //	socket.emit('i2c', i2cNum);
     // Toggle bit on display
     if(disp[i]>>j&0x1 === 1) {
         $('#id'+i+'_'+j).addClass('on');
@@ -99,11 +126,24 @@ function LEDclick(i, j) {
         for (i = 0; i < disp.length; i++) {
             // j cycles through each bit
             for (j = 0; j < 8; j++) {
-                if (((disp[i] >> j) & 0x1) === 1) {
-                    $('#id' + i + '_' + j).addClass('on');
-                } else {
-                    $('#id' + i + '_' + j).removeClass('on');
+                if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===0) ){
+                    $('#id'+i+'_'+j).addClass('green');
                 }
+                else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===0)){
+                    $('#id'+i+'_'+j).removeClass('green');
+                    $('#id'+i+'_'+j).addClass('red');
+                }
+
+                else if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===1)){
+                    $('#id'+i+'_'+j).removeClass('red');
+                    $('#id'+i+'_'+j).addClass('yellow');
+                }
+
+                else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===1)){
+                    $('#id'+i+'_'+j).removeClass('yellow');
+
+                }
+                else{console.log('you dun goofed');}
             }
         }
     }
