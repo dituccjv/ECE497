@@ -29,11 +29,17 @@ body {
 	background-color: #eeeeee;
 }
 
-.on {
+.green {
 	border: 1px solid #00ee00;
 	background-color: green;
 
 }
+.red {
+	border: 1px solid #ff0000;
+	background-color: red;
+
+}
+
 
 #i2cNum {
 	text-align: right; 
