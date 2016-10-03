@@ -22,6 +22,7 @@ var wire = new i2c(0x70, {
     
 });
 
+
 b.pinMode(button1,b.INPUT,7,'pulldown','fast');
 b.pinMode(button2,b.INPUT,7,'pulldown','fast');
 b.pinMode(button3,b.INPUT,7,'pulldown','fast');

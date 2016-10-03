@@ -1,5 +1,5 @@
 
- var b =require('bonescript');
+var b =require('bonescript');
 var bl = require('blessed');
 var program = bl.program();
 var data2;
