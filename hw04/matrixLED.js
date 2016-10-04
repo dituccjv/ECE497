@@ -47,8 +47,7 @@ function GLEDclick(i, j) {
 			     disp: '0x'+dispg[i].toString(16)});
     console.log('0x'+dispg[i].toString(16));
 //	socket.emit('i2c', i2cNum);
->>>>>>> 2Matrix
-    // Toggle bit on display
+// Toggle bit on display
     if(dispg[i]>>j&0x1 === 1) {
         $('#gid'+i+'_'+j).addClass('green');
     } else {
@@ -165,7 +164,7 @@ function RLEDclick(i, j) {
         for (i = 0; i < dispg.length; i++) {
             // j cycles through each bit
             for (j = 0; j < 8; j++) {
-                if (((dispg[i] >> j) & 0x1) === 1) {
+                if (((dispr[i] >> j) & 0x1) === 1) {
                     $('#rid' + i + '_' + j).addClass('red');
                 } else {
                     $('#rid' + i + '_' + j).removeClass('red');
