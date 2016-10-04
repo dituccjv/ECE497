@@ -40,12 +40,16 @@ $("#slider1").slider({min:0, max:15, slide: function(event, ui) {
 // Send one column when LED is clicked.
 function GLEDclick(i, j) {
 //	alert(i+","+j+" clicked");
+    console.log('0x'+dispg[i].toString(16));
+
     dispg[i] ^= 0x1<<j;
+    console.log({i,j});
     socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i,
 			     disp: '0x'+dispg[i].toString(16)});
+    console.log('0x'+dispg[i].toString(16));
 //	socket.emit('i2c', i2cNum);
     // Toggle bit on display
-    if(disp[i]>>j&0x1 === 1) {
+    if(dispg[i]>>j&0x1 === 1) {
         $('#gid'+i+'_'+j).addClass('green');
     } else {
         $('#gid'+i+'_'+j).removeClass('green');
@@ -57,6 +61,8 @@ function RLEDclick(i, j) {
     dispr[i] ^= 0x1<<j;
     socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i+1,
 			     disp: '0x'+dispr[i].toString(16)});
+    console.log({i2cNum: i2cNum, i: 2*i+1,
+		 disp: '0x'+dispr[i].toString(16)});
 //	socket.emit('i2c', i2cNum);
     // Toggle bit on display
     if(dispr[i]>>j&0x1 === 1) {
@@ -73,6 +79,7 @@ function RLEDclick(i, j) {
         // See https://github.com/LearnBoost/socket.io/wiki/Exposed-events
         // for Exposed events
         socket.on('message', function(data)
+
             { status_update("Received: message " + data);});
         socket.on('connect', function()
             { status_update("Connected to Server"); });
@@ -85,8 +92,8 @@ function RLEDclick(i, j) {
         socket.on('reconnect_failed', function()
             { message("Reconnect Failed"); });
 
-        socket.on('matrix',  matrixg);
-        socket.on('matrix',  matrixr);
+        socket.on('matrixg',  matrixg);
+        socket.on('matrixr',  matrixr);
 
     socket.emit('i2cset', {i2cNum: i2cNum, i: 0x21, disp: 1}); // Start oscillator (p10)
     socket.emit('i2cset', {i2cNum: i2cNum, i: 0x81, disp: 1}); // Disp on, blink off (p11)
@@ -97,8 +104,8 @@ function RLEDclick(i, j) {
 	i2c_smbus_write_byte(file, 0xe7);
     */
         // Read display for initial image.  Store in disp[]
-        socket.emit("matrixg", i2cNum);
-        socket.emit("matrixr", i2cNum);
+        socket.emit("matrix", i2cNum);
+
 
         firstconnect = false;
       }
@@ -125,6 +132,7 @@ function RLEDclick(i, j) {
         for (i = 0; i < data.length; i += 2) {
             dispg[i / 2] = parseInt(data[i], 16);
         }
+	console.log(dispg)
         //        status_update("disp: " + disp);
         // i cycles through each column
         for (i = 0; i < dispg.length; i++) {
@@ -149,8 +157,9 @@ function RLEDclick(i, j) {
         // Ignore the red.
         // Convert from hex.
         for (i = 0; i < data.length; i += 2) {
-            dispg[i / 2] = parseInt(data[i+1], 16);
+            dispr[i / 2] = parseInt(data[i+1], 16);
         }
+	console.log(dispr)
         //        status_update("disp: " + disp);
         // i cycles through each column
         for (i = 0; i < dispg.length; i++) {

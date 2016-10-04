@@ -197,11 +197,14 @@ io.sockets.on('connection', function (socket) {
 		// Get the last line of the output and send the string
 		lines = lines[1].substr(0,47);
 		console.log("lines = %s", lines);
-                socket.emit('matrix', lines);
+                socket.emit('matrixg', lines);
+                socket.emit('matrixr', lines);
                 if(error) { console.log('error: ' + error); }
                 if(stderr) {console.log('stderr: ' + stderr); }
             });
     });
+
+
 
     // Sets one column every time i2cset is received.
     socket.on('i2cset.bs', function(params) {
