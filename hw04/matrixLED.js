@@ -1,20 +1,35 @@
+var dispg = [];
+var dispr = [];
 var socket;
-    var firstconnect = true,
-        i2cNum  = "0x70",
-	disp = [];
+var firstconnect = true,
+i2cNum  = "0x70";
 
 // Create a matrix of LEDs inside the <table> tags.
-var matrixData;
+var matrixDataG;
 for(var j=7; j>=0; j--) {
-	matrixData += '<tr>';
+	matrixDataG += '<tr>';
 	for(var i=0; i<8; i++) {
-	    matrixData += '<td><div class="LED" id="id'+i+'_'+j+
-		'" onclick="LEDclick('+i+','+j+')">'+
+	    matrixDataG += '<td><div class="LED" id="gid'+i+'_'+j+
+		'" onclick="GLEDclick('+i+','+j+')">'+
 		i+','+j+'</div></td>';
 	    }
-	matrixData += '</tr>';
+	matrixDataG += '</tr>';
 }
-$('#matrixLED').append(matrixData);
+$('#matrixLEDG').append(matrixDataG);
+
+var matrixDataR;
+for(var j=7; j>=0; j--) {
+	matrixDataR += '<tr>';
+	for(var i=0; i<8; i++) {
+	    matrixDataR += '<td><div class="LED" id="rid'+i+'_'+j+
+		'" onclick="RLEDclick('+i+','+j+')">'+
+		i+','+j+'</div></td>';
+	    }
+	matrixDataR += '</tr>';
+}
+$('#matrixLEDR').append(matrixDataR);
+
+
 
 // The slider controls the overall brightness
 $("#slider1").slider({min:0, max:15, slide: function(event, ui) {
@@ -22,46 +37,38 @@ $("#slider1").slider({min:0, max:15, slide: function(event, ui) {
     }});
 
 // Send one column when LED is clicked.
-function LEDclick(i, j) {
-    disp[i] ^= 0x1<<j;
+function GLEDclick(i, j) {
+//	alert(i+","+j+" clicked");
+    console.log('0x'+dispg[i].toString(16));
 
-    //	alert(i+","+j+" clicked");
-    // if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===0) ){
-    //     disp[i] ^= 0x1<<j;
-    //     $('#id'+i+'_'+j).addClass('green');
-    // }
-    // else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===0)){
-    //     disp[i]^=0x1<<j;
-    //     disp[i+1] ^= 0x1<<j;
-    //     $('#id'+i+'_'+j).removeClass('green');
-    //     $('#id'+i+'_'+j).addClass('red');
-    // }
-
-    // else if((disp[i]>>j&0x1===0)&&(disp[i+1]>>j&0x1===1)){
-    //     disp[i] ^= 0x1<<j;
-    //     $('#id'+i+'_'+j).removeClass('red');
-    //     $('#id'+i+'_'+j).addClass('yellow');
-    // }
-
-    // else if((disp[i]>>j&0x1===1)&&(disp[i+1]>>j&0x1===1)){
-    //     disp[i] ^= 0x1<<j;
-    //     disp[i+1] ^= 0x1<<j;
-    //     $('#id'+i+'_'+j).removeClass('yellow');
-
-    // }
-    // else{console.log('you dun goofed');}
-
+    dispg[i] ^= 0x1<<j;
+    console.log({i,j});
     socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i,
-			   disp: '0x'+disp[i].toString(16)});
-    // socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i+1,
-    //     		   disp: '0x'+disp[i+1].toString(16)});
-
-    //	socket.emit('i2c', i2cNum);
+			     disp: '0x'+dispg[i].toString(16)});
+    console.log('0x'+dispg[i].toString(16));
+//	socket.emit('i2c', i2cNum);
+>>>>>>> 2Matrix
     // Toggle bit on display
-    if(disp[i]>>j&0x1 === 1) {
-        $('#id'+i+'_'+j).addClass('on');
+    if(dispg[i]>>j&0x1 === 1) {
+        $('#gid'+i+'_'+j).addClass('green');
     } else {
-        $('#id'+i+'_'+j).removeClass('on');
+        $('#gid'+i+'_'+j).removeClass('green');
+    }
+}
+5,4
+function RLEDclick(i, j) {
+//	alert(i+","+j+" clicked");
+    dispr[i] ^= 0x1<<j;
+    socket.emit('i2cset', {i2cNum: i2cNum, i: 2*i+1,
+			     disp: '0x'+dispr[i].toString(16)});
+    console.log({i2cNum: i2cNum, i: 2*i+1,
+		 disp: '0x'+dispr[i].toString(16)});
+//	socket.emit('i2c', i2cNum);
+    // Toggle bit on display
+    if(dispr[i]>>j&0x1 === 1) {
+        $('#rid'+i+'_'+j).addClass('red');
+    } else {
+        $('#rid'+i+'_'+j).removeClass('red');
     }
 }
 
@@ -72,6 +79,7 @@ function LEDclick(i, j) {
         // See https://github.com/LearnBoost/socket.io/wiki/Exposed-events
         // for Exposed events
         socket.on('message', function(data)
+
             { status_update("Received: message " + data);});
         socket.on('connect', function()
             { status_update("Connected to Server"); });
@@ -84,7 +92,8 @@ function LEDclick(i, j) {
         socket.on('reconnect_failed', function()
             { message("Reconnect Failed"); });
 
-        socket.on('matrix',  matrix);
+        socket.on('matrixg',  matrixg);
+        socket.on('matrixr',  matrixr);
 
     socket.emit('i2cset', {i2cNum: i2cNum, i: 0x21, disp: 1}); // Start oscillator (p10)
     socket.emit('i2cset', {i2cNum: i2cNum, i: 0x81, disp: 1}); // Disp on, blink off (p11)
@@ -96,6 +105,7 @@ function LEDclick(i, j) {
     */
         // Read display for initial image.  Store in disp[]
         socket.emit("matrix", i2cNum);
+
 
         firstconnect = false;
       }
@@ -110,9 +120,8 @@ function LEDclick(i, j) {
 
     // When new data arrives, convert it and display it.
     // data is a string of 16 values, each a pair of hex digits.
-    function matrix(data) {
+    function matrixg(data) {
         var i, j;
-        disp = [];
         //        status_update("i2c: " + data);
         // Make data an array, each entry is a pair of digits
         data = data.split(" ");
@@ -121,17 +130,45 @@ function LEDclick(i, j) {
         // Ignore the red.
         // Convert from hex.
         for (i = 0; i < data.length; i += 2) {
-            disp[i / 2] = parseInt(data[i], 16);
+            dispg[i / 2] = parseInt(data[i], 16);
         }
+	console.log(dispg)
         //        status_update("disp: " + disp);
         // i cycles through each column
-        for (i = 0; i < disp.length; i++) {
+        for (i = 0; i < dispg.length; i++) {
             // j cycles through each bit
             for (j = 0; j < 8; j++) {
-                if (((disp[i] >> j) & 0x1) === 1) {
-                    $('#id' + i + '_' + j).addClass('on');
+                if (((dispg[i] >> j) & 0x1) === 1) {
+                    $('#gid' + i + '_' + j).addClass('green'); }
+		else {
+                    $('#gid' + i + '_' + j).removeClass('green');
+                }
+            }
+        }
+    }
+
+    function matrixr(data) {
+        var i, j;
+        //        status_update("i2c: " + data);
+        // Make data an array, each entry is a pair of digits
+        data = data.split(" ");
+        //        status_update("data: " + data);
+        // Every other pair of digits are Green. The others are red.
+        // Ignore the red.
+        // Convert from hex.
+        for (i = 0; i < data.length; i += 2) {
+            dispr[i / 2] = parseInt(data[i+1], 16);
+        }
+	console.log(dispr)
+        //        status_update("disp: " + disp);
+        // i cycles through each column
+        for (i = 0; i < dispg.length; i++) {
+            // j cycles through each bit
+            for (j = 0; j < 8; j++) {
+                if (((dispg[i] >> j) & 0x1) === 1) {
+                    $('#rid' + i + '_' + j).addClass('red');
                 } else {
-                    $('#id' + i + '_' + j).removeClass('on');
+                    $('#rid' + i + '_' + j).removeClass('red');
                 }
             }
         }
